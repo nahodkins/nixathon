@@ -12,24 +12,27 @@ public class MiniMaxAgent {
 
     public int getAction(State st) {
         try {
-            max_value(st, depth);
+            double v = max_value(st, depth);
+            return x;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return x;
-
     }
 
-    public double max_value(State st, int depth) throws CloneNotSupportedException {
+    public int max_value(State st, int depth) throws CloneNotSupportedException {
+
+        if(depth ==0)
+            return st.evaluationFunction();
+
         ArrayList<Integer> children = new ArrayList<>();
 
         children = st.getLegalActions();
-        double v = -10000000;
+        int v = -10000000;
 
-        double z;
+        int z;
         //double z;
         for (int i = 0; i < children.size(); i++) {
-            z = min_value(st.generateSuccessor(st.computer, children.get(i)), depth);
+            z = min_value(st.generateSuccessor(st.player, children.get(i)), depth);
             if (z >= v) {
                 v = z;
                 this.x = i;
@@ -38,15 +41,17 @@ public class MiniMaxAgent {
         return v;
     }
 
-    public double min_value(State st, int d) throws CloneNotSupportedException {
+    public int min_value(State st, int depth) throws CloneNotSupportedException {
+        if(depth ==0)
+            return st.evaluationFunction();
 
         ArrayList<Integer> children = st.getLegalActions();
 
-        double v = 10000000;
+        int v = 10000000;
         int x = 0;
-        double z;
+        int z;
         for (int i = 0; i < children.size(); i++) {
-            z = max_value(st.generateSuccessor(st.player, children.get(i)), d - 1);
+            z = max_value(st.generateSuccessor(st.computer, children.get(i)), depth - 1);
             if (z <= v) {
                 v = z;
             }

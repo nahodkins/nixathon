@@ -1,5 +1,6 @@
 package com.team.name.bestrestservice.algo;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 public class State implements Cloneable {
@@ -60,4 +61,84 @@ public class State implements Cloneable {
     public Object clone() {
         return new State(this.board, String.valueOf(this.computer));
     }
+
+    public boolean isGoal(char agent){
+
+        String find=""+agent+""+agent+""+agent+""+agent;
+
+        //check rows
+        for(int i=0; i<this.rows; i++)
+            if(String.valueOf(this.board[i]).contains(find))
+                return true;
+
+        //check cols
+        for(int j=0; j<this.cols; j++){
+            String col="";
+            for(int i=0; i<this.rows; i++)
+                col+=this.board[i][j];
+
+            if(col.contains(find))
+                return true;
+        }
+
+        //check diags
+        ArrayList<Point> pos_right=new ArrayList<Point>();
+        ArrayList<Point> pos_left=new ArrayList<Point>();
+
+        for(int j=0; j<this.cols-4+1; j++)
+            pos_right.add(new Point(0,j));
+        for(int j=4-1; j<this.cols; j++)
+            pos_left.add(new Point(0,j));
+        for(int i=1; i<this.rows-4+1; i++){
+            pos_right.add(new Point(i,0));
+            pos_left.add(new Point(i,this.cols-1));
+        }
+
+        //check right diags
+        for (Point p : pos_right) {
+            String d="";
+            int x=p.x, y=p.y;
+            while(true){
+                if (x>=this.rows||y>=this.cols)
+                    break;
+                d+=this.board[x][y];
+                x+=1; y+=1;
+            }
+            if(d.contains(find))
+                return true;
+        }
+
+        //check left diags
+        for (Point p : pos_left) {
+            String d="";
+            int x=p.x, y=p.y;
+            while(true){
+                if(y<0||x>=this.rows||y>=this.cols)
+                    break;
+                d+=this.board[x][y];
+                x+=1; y-=1;
+            }
+            if(d.contains(find))
+                return true;
+        }
+
+        return false;
+
+    }
+
+
+
+    /* returns the value of each state for minimax to min/max over at
+    zero depth. Right now it's pretty trivial, looking for only goal states.
+    (This would be perfect for infinite depth minimax. Not so great for d=2) */
+    public int evaluationFunction(){
+
+        if (this.isGoal(computer))
+            return 1000;
+        if (this.isGoal(player))
+            return -1000;
+
+        return 0;
+    }
+
 }
