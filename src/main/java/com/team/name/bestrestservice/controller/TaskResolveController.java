@@ -1,5 +1,7 @@
 package com.team.name.bestrestservice.controller;
 
+import com.team.name.bestrestservice.algo.MiniMaxAgent;
+import com.team.name.bestrestservice.algo.State;
 import com.team.name.bestrestservice.pojo.GameState;
 import com.team.name.bestrestservice.pojo.MyResponseBody;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +20,11 @@ public class TaskResolveController {
 
     @PostMapping("/move")
     public ResponseEntity<MyResponseBody> move(@RequestBody GameState gameState) {
-
+        State state = new State(gameState.getBoard(), gameState.getPlayer());
+        MiniMaxAgent miniMaxAgent = new MiniMaxAgent(6);
+        int action = miniMaxAgent.getAction(state);
         MyResponseBody myResponseBody = new MyResponseBody();
-        myResponseBody.setColumn(2);
+        myResponseBody.setColumn(action);
         return ResponseEntity.ok(myResponseBody);
     }
 }
