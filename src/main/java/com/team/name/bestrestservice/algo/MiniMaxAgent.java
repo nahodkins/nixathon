@@ -21,8 +21,7 @@ public class MiniMaxAgent {
 
     public int max_value(State st, int depth) throws CloneNotSupportedException {
 
-        if(depth ==0)
-            return st.evaluationFunction();
+
 
         ArrayList<Integer> children = new ArrayList<>();
 
@@ -38,14 +37,18 @@ public class MiniMaxAgent {
                 this.x = children.get(i);
             }
         }
+
+        if(depth ==0)
+            return st.evaluationFunction();
+
         return v;
     }
 
     public int min_value(State st, int depth) throws CloneNotSupportedException {
+        ArrayList<Integer> children = st.getLegalActions();
+
         if(depth ==0)
             return st.evaluationFunction();
-
-        ArrayList<Integer> children = st.getLegalActions();
 
         int v = 10000000;
         int x = 0;
