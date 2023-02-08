@@ -12,7 +12,7 @@ public class MiniMaxAgent {
 
     public int getAction(State st) {
         try {
-            double v = max_value(st, depth);
+            max_value(st, depth);
             return x;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -32,10 +32,10 @@ public class MiniMaxAgent {
         int z;
         //double z;
         for (int i = 0; i < children.size(); i++) {
-            z = min_value(st.generateSuccessor(st.player, children.get(i)), depth);
+            z = min_value(st.generateSuccessor(st.computer, children.get(i)), depth);
             if (z >= v) {
                 v = z;
-                this.x = i;
+                this.x = children.get(i);
             }
         }
         return v;
@@ -51,7 +51,7 @@ public class MiniMaxAgent {
         int x = 0;
         int z;
         for (int i = 0; i < children.size(); i++) {
-            z = max_value(st.generateSuccessor(st.computer, children.get(i)), depth - 1);
+            z = max_value(st.generateSuccessor(st.player, children.get(i)), depth - 1);
             if (z <= v) {
                 v = z;
             }

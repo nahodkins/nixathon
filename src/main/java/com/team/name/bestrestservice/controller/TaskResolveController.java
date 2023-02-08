@@ -21,10 +21,21 @@ public class TaskResolveController {
     @PostMapping("/move")
     public ResponseEntity<MyResponseBody> move(@RequestBody GameState gameState) {
         State state = new State(gameState.getBoard(), gameState.getPlayer());
-        MiniMaxAgent miniMaxAgent = new MiniMaxAgent(6);
+        MiniMaxAgent miniMaxAgent = new MiniMaxAgent(getFirstEmptyRow(gameState.getBoard()));
         int action = miniMaxAgent.getAction(state);
         MyResponseBody myResponseBody = new MyResponseBody();
         myResponseBody.setColumn(action);
         return ResponseEntity.ok(myResponseBody);
+    }
+
+    private int getFirstEmptyRow(char[][] board) {
+        for(int i = board.length-1; i >= 0; i--) {
+            for(int j = 0; j < board[i].length; j++) {
+                if(board[i][j] == '_') {
+                    return i;
+                }
+            }
+        }
+        return 0;
     }
 }
